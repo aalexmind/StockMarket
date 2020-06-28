@@ -3,6 +3,8 @@ package stockmarketui.parts;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -12,21 +14,22 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import stockmarketui.simengine.Order;
-import stockmarketui.simengine.Order.OrderType;
 import stockmarketui.simengine.SimulatorEngine;
-import stockmarketui.simengine.TradingGateway;
 
 public class ControlsPart {
+	private final String ORDERSPARTID = "stockmarketui.part.orders";
+	private OrdersPart ordersPart;
 
 	@Inject
 	public ControlsPart() {
-
 	}
+
+	@Inject
+	EPartService partService;
 
 	@PostConstruct
 	public void postConstruct(Composite parent) {
-		SimulatorEngine se = SimulatorEngine.getInstance();
+
 		parent.setLayout(new GridLayout(6, false));
 		GridData textGrid = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 
@@ -37,10 +40,10 @@ public class ControlsPart {
 		textType.setMessage("Type");
 		textType.setLayoutData(textGrid);
 		Text textPriceMin = new Text(parent, SWT.BORDER);
-		textPriceMin.setMessage("min_price");
+		textPriceMin.setMessage("Min price");
 		textPriceMin.setLayoutData(textGrid);
 		Text textPriceMax = new Text(parent, SWT.BORDER);
-		textPriceMax.setMessage("max_price");
+		textPriceMax.setMessage("Max price");
 		textPriceMax.setLayoutData(textGrid);
 		Text textQuantity = new Text(parent, SWT.BORDER);
 		textQuantity.setMessage("quantity");
@@ -51,18 +54,15 @@ public class ControlsPart {
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
-				String res = new StringBuilder("add ")
-						.append(textSymbol.getText())
-						.append(" ")
-						.append(textType.getText())
-						.append(" ")
-						.append(textPriceMin.getText())
-						.append(" ")
-						.append(textPriceMax.getText())
-						.append(" ")
-						.append(textQuantity.getText()).toString();
-				se.getTradingGateway().addOrder(res);
+
+				// Mimic console style for simplicity
+				String res = "add " 
+						+ textSymbol.getText() + " " 
+						+ textType.getText() + " " 
+						+ textPriceMin.getText() + " " 
+						+ textPriceMax.getText() + " " 
+						+ textQuantity.getText();
+				SimulatorEngine.getInstance().addOrder(res);
 			}
 		});
 
@@ -71,7 +71,20 @@ public class ControlsPart {
 		buttonCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				tryCancelOrder();
 			}
 		});
+	}
+
+	private void tryCancelOrder() {
+		if (ordersPart == null) {
+			try {
+				MPart mpart = partService.findPart(ORDERSPARTID);
+				ordersPart = (OrdersPart) mpart.getObject();
+			} catch (Exception e1) {
+				return;
+			}
+		}
+		SimulatorEngine.getInstance().cancelOrder(ordersPart.getSelected());
 	}
 }

@@ -23,7 +23,13 @@ public class OrderBooks {
 	}
 
 	public void removeOrder(Order order) {
-		orders.removeIf(val -> val.getID() == order.getID());
+		removeOrder(order.getID());
+	}
+
+	public void removeOrder(int ID) {
+		if (!orders.removeIf(val -> val.getID() == ID)) {
+			LogHandler.getInstance().log("No order found with this ID and symbol");
+		}
 	}
 
 	private void sortOrders() {

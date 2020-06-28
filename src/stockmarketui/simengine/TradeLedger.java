@@ -15,13 +15,13 @@ public class TradeLedger {
 	}
 
 	public TradeLedger(boolean greedy) {
-		tradeHistory = new ArrayList<Trade>();
-		this.greedy = greedy;
+		this();
+		setGreedy(greedy);
 	}
 
 	public void addTrade(Order orderSell, Order orderBuy) {
 		int pricefinal = decideFinalPrice(orderSell, orderBuy);
-		tradeHistory.add(new Trade(orderSell, orderBuy, Instant.now(), pricefinal));
+		tradeHistory.add(new Trade(tradeHistory.size(), orderSell, orderBuy, Instant.now(), pricefinal));
 	}
 
 	private int decideFinalPrice(Order orderSell, Order orderBuy) {
@@ -32,9 +32,7 @@ public class TradeLedger {
 	}
 
 	public void printTrades() {
-		tradeHistory.forEach(v -> LogHandler.getInstance()
-				.log("Trade between: " + v.getOrderSell().getID() + " " + v.getOrderBuy().getID()));
-
+		tradeHistory.forEach(t -> LogHandler.getInstance().log("Trade between: " + t.getOrderSell().getID() + " " + t.getOrderBuy().getID()));
 	}
 
 	public boolean isGreedy() {

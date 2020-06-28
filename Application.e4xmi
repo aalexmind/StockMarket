@@ -20,19 +20,16 @@
     </children>
     <mainMenu xmi:id="_X7mowLfoEeqw58AivId3iA" elementId="stockmarketui.menu.0">
       <children xsi:type="menu:Menu" xmi:id="_dJitQLfoEeqw58AivId3iA" elementId="stockmarketui.menu.file" label="File">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_mnOIoLfoEeqw58AivId3iA" elementId="stockmarketui.handledmenuitem.open" label="Open" command="_Hfw94LfnEeqw58AivId3iA"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_nnPbMLfoEeqw58AivId3iA" elementId="stockmarketui.handledmenuitem.exit" label="Exit" command="_A4GGULfnEeqw58AivId3iA"/>
       </children>
     </mainMenu>
   </children>
   <handlers xmi:id="_W2G1wLfnEeqw58AivId3iA" elementId="stockmarketui.handler.exitCommand" contributionURI="bundleclass://StockMarketUI/stockmarketui.handlers.exitCommand" command="_A4GGULfnEeqw58AivId3iA"/>
-  <handlers xmi:id="_fym2sLfnEeqw58AivId3iA" elementId="stockmarketui.handler.openCommand" contributionURI="bundleclass://StockMarketUI/stockmarketui.handlers.openHandler" command="_Hfw94LfnEeqw58AivId3iA"/>
   <rootContext xmi:id="_c3AF2cjYEeSyMNYR5xypkQ" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
     <children xmi:id="_c3AF2sjYEeSyMNYR5xypkQ" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
     <children xmi:id="_c3AF28jYEeSyMNYR5xypkQ" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
   </rootContext>
   <commands xmi:id="_A4GGULfnEeqw58AivId3iA" elementId="stockmarketui.command.exit" commandName="exitCommand"/>
-  <commands xmi:id="_Hfw94LfnEeqw58AivId3iA" elementId="stockmarketui.command.open" commandName="openCommand"/>
   <addons xmi:id="_c3AF0sjYEeSyMNYR5xypkQ" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_c3AF08jYEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_c3AF1MjYEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

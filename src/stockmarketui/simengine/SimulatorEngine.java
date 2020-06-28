@@ -35,19 +35,10 @@ public class SimulatorEngine {
 		if (args == null) {
 			return;
 		}
-		if (args.length == 0) {
-			LogHandler.getInstance().log("No input argument found"); //$NON-NLS-1$
-		}
 		boolean greedy = false;
 		if (args.length > 0) {
 			for (int i = 0; i < args.length; i++) {
-				if (args[i].equals("-l")) { //$NON-NLS-1$
-					try {
-						LogHandler.setLogPath(args[i + 1]);
-					} catch (Exception e) {
-						LogHandler.getInstance().log("Wrong or missing path to log file"); //$NON-NLS-1$
-					}
-				} else if (args[i].equals("-g")) { //$NON-NLS-1$
+				if (args[i].equals("-g")) {
 					greedy = true;
 				}
 			}
@@ -57,18 +48,15 @@ public class SimulatorEngine {
 		processOrders();
 	}
 
-	public void fillOrderBookMap(HashMap<String, OrderBooks> orderBookMap2, String symbol) {
-		orderBookMap2.put(symbol, new OrderBooks(symbol));
-	}
-
 	private void processOrders() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String s;
+		StringBuilder s = new StringBuilder();
 		try {
 			do {
-				s = br.readLine();
-				parseInput(s);
-			} while (!s.equals("exit")); //$NON-NLS-1$
+				s.setLength(0);
+				s.append(br.readLine());
+				parseInput(s.toString());
+			} while (!s.toString().equals("exit"));
 		} catch (IOException e) {
 			LogHandler.getInstance().log(e.getMessage());
 		}
@@ -77,27 +65,27 @@ public class SimulatorEngine {
 
 	private void parseInput(String input) {
 		try {
-			String type = input.trim().split("\\s+")[0]; //$NON-NLS-1$
+			String type = input.trim().split("\\s+")[0];
 			switch (type) {
-			case "add": //$NON-NLS-1$
+			case "add":
 				tradingGateway.addOrder(input);
 				break;
-			case "cancel": //$NON-NLS-1$
+			case "cancel":
 				tradingGateway.cancelOrder(input);
 				break;
-			case "trades": //$NON-NLS-1$
+			case "trades":
 				tradeLedger.printTrades();
 				break;
-			case "orders": //$NON-NLS-1$
+			case "orders":
 				orderBookMap.forEach((key, value) -> value.printOrders());
 				break;
-			case "help": //$NON-NLS-1$
+			case "help":
 				LogHandler.getInstance().log("Syntax: command [symbol S/B min_price max_price quantity]");
 				LogHandler.getInstance().log("commands: add, cancel, trades, orders, help");
 				LogHandler.getInstance().log("Example commands: add gog S 30 50 10");
 				break;
-			case "exit": //$NON-NLS-1$
-				matchingEngine.shutdown();
+			case "exit":
+				shutdown();
 				return;
 
 			default:
@@ -113,12 +101,24 @@ public class SimulatorEngine {
 		return tradingGateway;
 	}
 
+	public void addOrder(String input) {
+		tradingGateway.addOrder(input);
+	}
+
+	public void cancelOrder(String input) {
+		tradingGateway.cancelOrder(input);
+	}
+
 	public TradeLedger getTradeLedger() {
 		return tradeLedger;
 	}
 
 	public HashMap<String, OrderBooks> getOrderBookMap() {
 		return orderBookMap;
+	}
+
+	public void shutdown() {
+		matchingEngine.shutdown();
 	}
 
 }

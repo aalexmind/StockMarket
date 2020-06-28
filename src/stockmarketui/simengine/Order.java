@@ -13,7 +13,7 @@ public class Order implements Comparable<Order> {
 	private int priceMin;
 	private int priceMax;
 	private int quantity;
-	private Instant timeAdded;
+	private final Instant timeAdded;
 
 	private boolean canBeRemoved;
 
@@ -23,13 +23,12 @@ public class Order implements Comparable<Order> {
 		setCanBeRemoved(false);
 	}
 
-	public Order(OrderType type, String symbol, Integer priceMin, Integer priceMax, Integer quantity) {
+	public Order(OrderType type, String symbol, int priceMin, int priceMax, int quantity) {
 		this();
-		this.setOrderType(type);
-		this.symbol = symbol;
-		this.priceMin = priceMin;
-		this.setPriceMax(priceMax);
-		this.setQuantity(quantity);
+		setOrderType(type);
+		setSymbol(symbol);
+		setPrices(priceMin, priceMax);
+		setQuantity(quantity);
 	}
 
 	@Override
@@ -46,10 +45,18 @@ public class Order implements Comparable<Order> {
 		return 0;
 	}
 
+	private void setPrices(int priceMin, int priceMax) {
+		if (priceMax >= priceMin) {
+			setPriceMin(priceMin);
+			setPriceMax(priceMax);
+		} else {
+			setPriceMin(priceMax);
+			setPriceMax(priceMin);
+		}
+	}
+
 	public String print() {
-		String order = this.getID() + " " + this.getOrderType() + " " + this.getSymbol() + " " + this.getPriceMin()
-				+ "-" + this.getPriceMax() + " " + this.getQuantity();
-		return order;
+		return getID() + " " + getOrderType() + " " + getSymbol() + " " + getPriceRange() + " " + getQuantity();
 	}
 
 	private Instant getCreatedOn() {
@@ -60,56 +67,60 @@ public class Order implements Comparable<Order> {
 		return ID;
 	}
 
+	public void setID(int iD) {
+		ID = iD;
+	}
+
 	public OrderType getOrderType() {
 		return orderType;
-	}
-
-	public int getPriceMax() {
-		return priceMax;
-	}
-
-	public Integer getPriceMin() {
-		return priceMin;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public boolean canBeRemoved() {
-		return canBeRemoved;
-	}
-
-	public void setID(int ID) {
-		this.ID = ID;
 	}
 
 	public void setOrderType(OrderType orderType) {
 		this.orderType = orderType;
 	}
 
+	public Integer getPriceMax() {
+		return priceMax;
+	}
+
 	public void setPriceMax(int priceMax) {
 		this.priceMax = priceMax;
+	}
+
+	public Integer getPriceMin() {
+		return priceMin;
 	}
 
 	public void setPriceMin(int priceMin) {
 		this.priceMin = priceMin;
 	}
 
+	public String getPriceRange() {
+		return getPriceMin() + "-" + getPriceMax();
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
-	public void setCanBeRemoved(boolean remove) {
-		this.canBeRemoved = remove;
+	public String getSymbol() {
+		return symbol;
 	}
 
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+
+	public boolean canBeRemoved() {
+		return canBeRemoved;
+	}
+
+	public void setCanBeRemoved(boolean remove) {
+		this.canBeRemoved = remove;
 	}
 
 }

@@ -18,6 +18,9 @@ import org.eclipse.swt.widgets.Text;
 import stockmarketui.simengine.SimulatorEngine;
 
 public class TradesPart {
+	private static final String INPUT_MSG = "Enter symbol to show trades";
+	private static final String SHOWTEXT = "Show";
+
 	private Text txtInput;
 
 	private TableViewer tableViewer;
@@ -25,23 +28,26 @@ public class TradesPart {
 	@PostConstruct
 	public void createComposite(Composite parent) {
 		parent.setLayout(new GridLayout(2, false));
-		SimulatorEngine se = SimulatorEngine.getInstance();
 
 		Button buttonShow = new Button(parent, SWT.PUSH);
-		buttonShow.setText("Show");
+		buttonShow.setText(SHOWTEXT);
 		buttonShow.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				tableViewer.getTable().removeAll();
-				se.getTradeLedger().getTradeHistory().forEach(o -> tableViewer.add(o.print()));
 				String symbol = txtInput.getText();
 				if (symbol != null && !symbol.isEmpty()) {
+					SimulatorEngine.getInstance().getTradeLedger().getTradeHistory().stream()
+							.filter(o -> o.getSymbol().equals(symbol)).forEach(o -> tableViewer.add(o.print()));
+				} else {
+					SimulatorEngine.getInstance().getTradeLedger().getTradeHistory()
+							.forEach(o -> tableViewer.add(o.print()));
 				}
 			}
 		});
 
 		txtInput = new Text(parent, SWT.BORDER);
-		txtInput.setMessage("Enter symbol to show trades");
+		txtInput.setMessage(INPUT_MSG);
 		txtInput.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
